@@ -1,6 +1,6 @@
 export default {
   name: "welcome",
   data() {
-    return { title: "你好啊施沁玥" };
+    return { title: "你好啊小玥玥" };
   }
 };
