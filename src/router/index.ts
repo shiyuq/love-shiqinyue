@@ -37,9 +37,7 @@ import { type DataInfo, userKey } from "@/utils/auth";
  */
 const modules: Record<string, any> = import.meta.glob(
   ["./modules/**/*.ts", "!./modules/**/remaining.ts"],
-  {
-    eager: true
-  }
+  { eager: true }
 );
 
 /** 原始静态路由（未做任何处理） */

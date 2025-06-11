@@ -20,9 +20,7 @@ import darkIcon from "@/assets/svg/dark.svg?component";
 import Lock from "~icons/ri/lock-fill";
 import User from "~icons/ri/user-3-fill";
 
-defineOptions({
-  name: "Login"
-});
+defineOptions({ name: "Login" });
 
 const router = useRouter();
 const loading = ref(false);
@@ -36,10 +34,7 @@ const { dataTheme, overallStyle, dataThemeChange } = useDataThemeChange();
 dataThemeChange(overallStyle.value);
 const { title } = useNav();
 
-const ruleForm = reactive({
-  username: "admin",
-  password: "admin123"
-});
+const ruleForm = reactive({ username: "", password: "" });
 
 const onLogin = async (formEl: FormInstance | undefined) => {
   if (!formEl) return;
@@ -121,18 +116,14 @@ useEventListener(document, "keydown", ({ code }) => {
             <Motion :delay="100">
               <el-form-item
                 :rules="[
-                  {
-                    required: true,
-                    message: '请输入账号',
-                    trigger: 'blur'
-                  }
+                  { required: true, message: '请输入你的名字', trigger: 'blur' }
                 ]"
                 prop="username"
               >
                 <el-input
                   v-model="ruleForm.username"
                   clearable
-                  placeholder="账号"
+                  placeholder="请输入你的名字"
                   :prefix-icon="useRenderIcon(User)"
                 />
               </el-form-item>
