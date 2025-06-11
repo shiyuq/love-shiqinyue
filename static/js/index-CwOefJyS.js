@@ -1,1 +1,0 @@
-import{_ as t,c as n,o,S as a}from"./index-Djuwyg-V.js";const r={name:"welcome",data(){return{title:"你好啊施沁玥"}}};function s(e,c,l,i,p,_){return o(),n("h1",null,a(e.title),1)}const f=t(r,[["render",s]]);export{f as default};
