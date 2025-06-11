@@ -7,9 +7,7 @@ import BackTopIcon from "@/assets/svg/back_top.svg?component";
 import { h, computed, Transition, defineComponent } from "vue";
 import { usePermissionStoreHook } from "@/store/modules/permission";
 
-const props = defineProps({
-  fixedHeader: Boolean
-});
+const props = defineProps({ fixedHeader: Boolean });
 
 const { showModel } = useTags();
 const { $storage, $config } = useGlobal<GlobalPropertiesApi>();
@@ -73,12 +71,7 @@ const getSectionStyle = computed(() => {
 });
 
 const transitionMain = defineComponent({
-  props: {
-    route: {
-      type: undefined,
-      required: true
-    }
-  },
+  props: { route: { type: undefined, required: true } },
   render() {
     const transitionName =
       transitions.value(this.route)?.name || "fade-transform";
@@ -97,9 +90,7 @@ const transitionMain = defineComponent({
         mode: "out-in",
         appear: true
       },
-      {
-        default: () => [this.$slots.default()]
-      }
+      { default: () => [this.$slots.default()] }
     );
   }
 });
@@ -208,6 +199,6 @@ const transitionMain = defineComponent({
 }
 
 .main-content {
-  margin: 24px;
+  margin: 10px;
 }
 </style>
