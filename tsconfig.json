@@ -47,7 +47,7 @@
     "src/**/*.vue",
     "types/*.d.ts",
     "vite.config.ts"
-, "src/views/welcome/component.js"  ],
+, "src/views/welcome1/component.js"  ],
   "exclude": [
     "dist",
     "**/*.js",
