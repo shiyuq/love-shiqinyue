@@ -1,5 +1,6 @@
 import { ElLoading, ElMessage, genFileId } from "element-plus";
 
+import QRCode from "qrcode";
 import dayjs from "dayjs";
 import ossService from "@/utils/oss";
 
@@ -14,7 +15,10 @@ export default {
       mediaFile: null,
       previewMediaUrl: "",
       isVideo: false,
-      mediaFileList: []
+      mediaFileList: [],
+
+      finalImage: null,
+      imageBase64: null
     };
   },
   methods: {
@@ -70,12 +74,18 @@ export default {
         percentage: 0
       });
     },
-    handleImageChange(file, fileList) {
+    async handleImageChange(file, fileList) {
       if (!file || !file.raw) return;
       this.resetImage();
       this.imageFile = file.raw;
       this.previewImageUrl = URL.createObjectURL(file.raw);
       this.imageFileList = [file];
+
+      const reader = new FileReader();
+      reader.onload = async e => {
+        this.imageBase64 = e.target.result; // 这是 base64 字符串
+      };
+      reader.readAsDataURL(file.raw); // 转成 base64
     },
     handleMediaBeforeUpload(file) {
       // 限制音频视频格式和大小
@@ -131,23 +141,58 @@ export default {
           text: "正在上传媒体文件...",
           background: "rgba(0, 0, 0, 0.7)"
         });
-        await ossService.uploadToOSS(
+        const fileUrl = await ossService.uploadToOSS(
           this.mediaFile,
           dayjs().format("YYYYMMDDHHmmss")
         );
+        // const fileUrl =
+        //   "http://shiqinyue.oss-cn-shanghai.aliyuncs.com/photo/20250612212105.m4a";
         loading.close();
         loading = ElLoading.service({
           lock: true,
           text: "正在合成新图...",
           background: "rgba(0, 0, 0, 0.7)"
         });
-        setTimeout(() => {
-          loading.close();
-        }, 1000);
-      } catch (error) {
+        await this.mergeImageWithQRCode(this.imageBase64, fileUrl);
         loading.close();
+        ElMessage.success("生成成功");
+      } catch (error) {
+        loading?.close();
       }
-      ElMessage.success("生成成功");
+    },
+    async mergeImageWithQRCode(imageBase64, url) {
+      // 加载原图
+      const image = new Image();
+      image.src = imageBase64;
+      await new Promise(resolve => (image.onload = resolve));
+
+      // 生成二维码
+      const qrCodeDataUrl = await QRCode.toDataURL(url, {
+        margin: 2,
+        scale: 10
+      });
+      const qrImage = new Image();
+      qrImage.src = qrCodeDataUrl;
+      await new Promise(resolve => (qrImage.onload = resolve));
+
+      // 画到 canvas
+      const canvas = this.$refs.canvas;
+      const ctx = canvas.getContext("2d");
+      canvas.width = image.width;
+      canvas.height = image.height;
+
+      ctx.drawImage(image, 0, 0, image.width, image.height);
+
+      const qrSize = Math.floor(image.width * 0.15);
+      ctx.drawImage(
+        qrImage,
+        image.width - qrSize,
+        image.height - qrSize,
+        qrSize,
+        qrSize
+      );
+
+      this.finalImage = canvas.toDataURL("image/png");
     }
   }
 };

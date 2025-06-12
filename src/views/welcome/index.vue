@@ -32,7 +32,7 @@
     </div>
 
     <div v-if="previewImageUrl" class="preview-area">
-      <img :src="previewImageUrl" class="preview-image" />
+      <img :src="previewImageUrl" alt="" class="preview-image" />
     </div>
 
     <!-- 音频/视频上传 -->
@@ -86,6 +86,13 @@
         @click="submit"
         >生成新图</el-button
       >
+    </div>
+
+    <canvas ref="canvas" style="display: none" />
+
+    <div v-if="finalImage" class="preview-area">
+      <p><strong>请长按图片下载</strong></p>
+      <img :src="finalImage" alt="最终合成图" class="preview-image" />
     </div>
   </div>
 </template>
