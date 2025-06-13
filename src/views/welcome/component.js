@@ -51,11 +51,11 @@ export default {
       const isValidType = file.type.startsWith("image/");
       const isLt20M = file.size / 1024 / 1024 < 20;
       if (!isValidType) {
-        this.$message.error("只能上传图片文件");
+        ElMessage.error("只能上传图片文件");
         return false;
       }
       if (!isLt20M) {
-        this.$message.error("图片大小不能超过 20MB");
+        ElMessage.error("图片大小不能超过 20MB");
         return false;
       }
       return true; // 允许上传，接下来触发 change 事件
@@ -93,12 +93,15 @@ export default {
         file.type.startsWith("audio") || file.type.startsWith("video");
       const isLt300M = file.size / 1024 / 1024 < 300;
       if (!isAudioOrVideo) {
-        this.$message.error("只能上传音频或视频文件");
+        ElMessage.error("只能上传音频或视频文件");
         return false;
       }
       if (!isLt300M) {
-        this.$message.error("文件大小不能超过 300MB");
+        ElMessage.error("文件大小不能超过 300MB");
         return false;
+      }
+      if (file.name.endsWith(".amr")) {
+        ElMessage.warning("不支持 .amr 文件，请使用 .m4a 或 .mp3 格式");
       }
       return true;
     },
