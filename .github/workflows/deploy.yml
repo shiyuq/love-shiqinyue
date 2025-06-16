@@ -29,6 +29,7 @@ jobs:
           cd dist
           sudo apt-get install dos2unix -y
           dos2unix index.html
+          sed -i -E 's/\s*crossorigin\b//g' index.html
           sed -i -E 's/(href|src)="\/love-shiqinyue\/(static\/[^"]+)"/\1="https:\/\/cdn.jsdelivr.net\/gh\/shiyuq\/love-shiqinyue@gh-pages\/\2"/g' index.html
 
       - name: Deploy to GitHub Pages
