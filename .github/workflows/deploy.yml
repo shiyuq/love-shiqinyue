@@ -24,6 +24,12 @@ jobs:
       - name: Build
         run: yarn browser:build
 
+      - name: Fix CDN paths in index.html
+        run: |
+          cd dist
+          # 替换 index.html 中所有 href 和 src 里以 /static/ 开头的路径为 jsDelivr CDN 地址
+          sed -i -E 's|(href|src)="\/(static\/[^"]+)"|\1="https://cdn.jsdelivr.net/gh/shiyuq/love-shiqinyue@gh-pages/\2"|g' index.html
+
       - name: Deploy to GitHub Pages
         uses: JamesIves/github-pages-deploy-action@v4
         with:
